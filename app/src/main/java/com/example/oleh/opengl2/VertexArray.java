@@ -1,8 +1,12 @@
 package com.example.oleh.opengl2;
 
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 public class VertexArray {
+    private static final int FLOAT_SIZE_BYTES = 4;
 
     public float [] array ;
 
@@ -31,5 +35,14 @@ public class VertexArray {
             System.arraycopy(points,0,temp,array.length,points.length);
             array = temp;
         }
+    }
+
+    public  FloatBuffer floatBuffer() {
+        FloatBuffer buffer = ByteBuffer
+                .allocateDirect(getArray().length * FLOAT_SIZE_BYTES)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        buffer.put(getArray()).position(0);
+        return buffer;
     }
 }

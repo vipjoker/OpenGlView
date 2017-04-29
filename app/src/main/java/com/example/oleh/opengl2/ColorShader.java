@@ -1,6 +1,8 @@
 package com.example.oleh.opengl2;
 
 
+import android.opengl.GLES20;
+
 public class ColorShader extends Shader {
 
     private static final String mVertexShader =
@@ -20,4 +22,23 @@ public class ColorShader extends Shader {
     public ColorShader() {
         super(mVertexShader, mFragmentShader);
     }
+
+    public int getColorLocation(){
+        return findAttribute("uColor", new IntFunction() {
+            @Override
+            public int getLocation(int program, String name) {
+                return GLES20.glGetUniformLocation(program,name);
+            }
+        });
+    }
+
+    public int getPositionLocation(){
+        return findAttribute("aPosition", new IntFunction() {
+            @Override
+            public int getLocation(int program, String name) {
+                return GLES20.glGetAttribLocation(program,name);
+            }
+        });
+    }
+
 }
