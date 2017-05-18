@@ -1,4 +1,4 @@
-package com.example.oleh.opengl2;
+package com.example.oleh.opengl2.shaders;
 
 
 import android.opengl.GLES20;

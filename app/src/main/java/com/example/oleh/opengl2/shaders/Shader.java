@@ -1,8 +1,10 @@
-package com.example.oleh.opengl2;
+package com.example.oleh.opengl2.shaders;
 
 import android.opengl.GLES20;
 
-import static com.example.oleh.opengl2.GLErrorUtils.checkGlError;
+import com.example.oleh.opengl2.utils.GLErrorUtils;
+
+import static com.example.oleh.opengl2.utils.GLErrorUtils.checkGlError;
 
 
 public abstract class Shader {

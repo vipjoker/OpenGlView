@@ -1,11 +1,10 @@
-package com.example.oleh.opengl2;
+package com.example.oleh.opengl2.utils;
 
 import android.opengl.GLES20;
 import android.util.Log;
 
 public abstract class GLErrorUtils {
     public static final String TAG = "OPEN_GL_ERROR";
-
 
     public static void checkGlError(String op) {
         int error;
@@ -14,7 +13,6 @@ public abstract class GLErrorUtils {
             throw new RuntimeException(op + ": glError " + error);
         }
     }
-
 
     public static void checkProgramError(int program) {
         int[] linkStatus = new int[1];
@@ -37,5 +35,4 @@ public abstract class GLErrorUtils {
            throw new RuntimeException(String.format("%s shader error " , shaderType == GLES20.GL_FRAGMENT_SHADER? "Fragment":"Vertex"));
         }
     }
-
 }

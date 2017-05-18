@@ -1,5 +1,7 @@
 package com.example.oleh.opengl2;
 
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 

@@ -1,16 +1,16 @@
-package com.example.oleh.opengl2;
+package com.example.oleh.opengl2.shapes;
 
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class VertexArray {
+public abstract class Shape {
     private static final int FLOAT_SIZE_BYTES = 4;
 
     public float [] array ;
 
-    public VertexArray addPoint(double x,double y, double z){
+    public Shape addPoint(double x, double y, double z){
         addPoints((float) x,(float) y,(float) z);
         return this;
     }
@@ -45,4 +45,6 @@ public class VertexArray {
         buffer.put(getArray()).position(0);
         return buffer;
     }
+
+    abstract public void draw();
 }
