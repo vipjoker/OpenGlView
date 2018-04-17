@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.oleh.opengl2.MainActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:weightSum="2"
+              tools:context="com.example.oleh.opengl2.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <TextureView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+
+        android:id="@+id/textureView"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
         android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="#ccc">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eye x"/>
+        <SeekBar
 
-</android.support.constraint.ConstraintLayout>
+            style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sbEyeX"
+            android:progress="4"/>
+  <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eye y"/>
+        <SeekBar
+
+            style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sbEyeY"
+            android:progress="4"/>
+
+
+  <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eye z"/>
+        <SeekBar
+
+            style="@android:style/Widget.DeviceDefault.Light.SeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sbEyeZ"
+
+            android:progress="4"/>
+
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.example.oleh.opengl2.shaders;
 
 import android.opengl.GLES20;
 
+import com.example.oleh.opengl2.thirdParty.gles.GlUtil;
 import com.example.oleh.opengl2.utils.GLErrorUtils;
 
 import static com.example.oleh.opengl2.utils.GLErrorUtils.checkGlError;
@@ -46,14 +47,7 @@ public abstract class Shader {
     }
 
     private   int loadShader(int shaderType, String source) {
-        int shader = GLES20.glCreateShader(shaderType);
-
-        if (shader != 0) {
-            GLES20.glShaderSource(shader, source);
-            GLES20.glCompileShader(shader);
-            GLErrorUtils.checkShaderError(shader,shaderType);
-        }
-        return shader;
+        return  GlUtil.loadShader(shaderType,source);
     }
 
 

@@ -21,10 +21,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.graphics.Color;
+import android.graphics.SurfaceTexture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,10 @@ import android.view.MotionEvent;
 import android.view.TextureView;
 
 import java.util.Arrays;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLDisplay;
 
 import static android.hardware.SensorManager.SENSOR_DELAY_FASTEST;
 import static android.hardware.SensorManager.SENSOR_DELAY_NORMAL;
@@ -68,10 +74,41 @@ public class GLES20Activity extends Activity implements SensorEventListener {
             // context, and set an OpenGL ES 2.0-compatible renderer.
 
             mGLSurfaceView.setEGLContextClientVersion(2);
+            mGLSurfaceView.setEGLConfigChooser(new MyConfigChooser());
             mGLSurfaceView.setRenderer(gles20TriangleRenderer);
 
         }
-        setContentView(mGLSurfaceView);
+        setContentView(R.layout.activity_main);
+
+        TextureView view = (TextureView)findViewById(R.id.textureView);
+
+        view.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+
+            }
+
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+                GLES20.glViewport(0, 0, width, height);
+                GLES20.glEnable(GLES20.GL_ALIASED_LINE_WIDTH_RANGE);
+            }
+
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                return false;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+                GLES20.glClearColor(1, 0, 0, 1.0f);
+                GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+
+            }
+        });
+
+
     }
 
 
@@ -191,4 +228,36 @@ public class GLES20Activity extends Activity implements SensorEventListener {
             return super.onTouchEvent(event);
         }
     }
+
+
+
+
+    class MyConfigChooser implements GLSurfaceView.EGLConfigChooser {
+        @Override
+        public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
+            int attribs[] = {
+                    EGL10.EGL_LEVEL, 0,
+                    EGL10.EGL_RENDERABLE_TYPE, 4,  // EGL_OPENGL_ES2_BIT
+                    EGL10.EGL_COLOR_BUFFER_TYPE, EGL10.EGL_RGB_BUFFER,
+                    EGL10.EGL_RED_SIZE, 8,
+                    EGL10.EGL_GREEN_SIZE, 8,
+                    EGL10.EGL_BLUE_SIZE, 8,
+                    EGL10.EGL_DEPTH_SIZE, 16,
+                    EGL10.EGL_SAMPLE_BUFFERS, 1,
+                    EGL10.EGL_SAMPLES, 4,  // This is for 4x MSAA.
+                    EGL10.EGL_NONE
+            };
+            EGLConfig[] configs = new EGLConfig[1];
+            int[] configCounts = new int[1];
+            egl.eglChooseConfig(display, attribs, configs, 1, configCounts);
+
+            if (configCounts[0] == 0) {
+                // Failed! Error handling.
+                return null;
+            } else {
+                return configs[0];
+            }
+        }
+    }
+
 }
