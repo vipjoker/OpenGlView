@@ -1,35 +1,95 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
+    namespace 'com.example.oleh.opengl2'   // required in AGP 8+
+    compileSdk 34
 
-
-//    testOptions {
-//        unitTests.returnDefaultValues = true
-//    }
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.oleh.opengl2"
-        minSdkVersion 17
-        targetSdkVersion 25
+        minSdk 21                // OpenGL ES 3.0 baseline
+        targetSdk 34
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake {
+                // Box2D 3 is pure C (C11 standard)
+                cFlags "-std=c11 -O3"
+                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+                // Build for standard Android architectures
+                abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+            }
         }
+    }
+
+    buildFeatures {
+        prefab true // <-- CRITICAL: Enables native dependency resolution from the AAR
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file("src/main/cpp/CMakeLists.txt")
+            version "3.22.1"
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles(
+                    getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+            )
+            // signingConfig signingConfigs.release  // add when ready
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging true
+        }
+        resources {
+            excludes += ['/META-INF/{AL2.0,LGPL2.1}']
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // AndroidX replacements
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:1.13.1'  // if using Kotlin
+
+
+    implementation files ('libs/SDL3-3.4.16.aar')
+    implementation files ('libs/SDL3_image-3.4.6.aar')
+    implementation files ('libs/SDL3_mixer-3.2.4.aar')
+    implementation files ('libs/SDL3_ttf-3.2.2.aar')
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }

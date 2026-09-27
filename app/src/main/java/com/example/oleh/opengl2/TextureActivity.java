@@ -139,20 +139,13 @@ public class TextureActivity extends Activity implements SeekBar.OnSeekBarChange
         float offset = progress / 10.0f;
 
         float result = offset - 5.0f;
-        switch (seekBar.getId()) {
-            case R.id.sbEyeX:
-
-                openGLRenderer.setX((float)(Math.cos(result ) * 4f));
-
-                break;
-            case R.id.sbEyeY:
-                openGLRenderer.setY(result);
-
-                break;
-            case R.id.sbEyeZ:
-                openGLRenderer.setZ((float)(Math.sin(result ) * 4f));
-
-                break;
+        int id = seekBar.getId();
+        if (id == R.id.sbEyeX) {
+            openGLRenderer.setX((float) (Math.cos(result) * 4f));
+        } else if (id == R.id.sbEyeY) {
+            openGLRenderer.setY(result);
+        } else if (id == R.id.sbEyeZ) {
+            openGLRenderer.setZ((float) (Math.sin(result) * 4f));
         }
     }
 
